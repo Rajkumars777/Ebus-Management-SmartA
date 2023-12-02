@@ -1,0 +1,439 @@
+<!-- load static  -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SmartA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link rel="icon" href="{% static 'accounts/assets/img/favicon.png' %}" type="image/gif" sizes="32x32">
+  <link href="{% static 'accounts/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon"> 
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> <!-- New Created -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <link href="{% static 'accounts/assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet"> 
+  <link href="{% static 'accounts/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet"> 
+  <link href="{% static 'accounts/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet"> 
+  <link href="{% static 'accounts/assets/vendor/venobox/venobox.css' %}" rel="stylesheet"> 
+  <link href="{% static 'accounts/assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet"> 
+
+  <!-- Typed js  -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'accounts/assets/css/custom.css' %}" rel="stylesheet"> <!-- New Created --> 
+  <link href="{% static 'accounts/assets/css/style.css' %}" rel="stylesheet">  
+</head>
+<style>
+  /* search suggestions  */
+.autocomplete {
+position: relative;
+display: inline-block;
+}
+
+.autocomplete-items {
+position: absolute;
+border: 1px solid #d4d4d4;
+border-bottom: none;
+border-top: none;
+z-index: 99;
+
+top: 100%;
+left: 0;
+right: 0;
+}
+
+.autocomplete-items div {
+padding: 10px;
+cursor: pointer;
+background-color: #fff; 
+border-bottom: 1px solid #d4d4d4; 
+}
+
+.autocomplete-items div:hover {
+background-color: #e9e9e9; 
+}
+
+.autocomplete-active {
+background-color: DodgerBlue !important; 
+color: #ffffff; }
+/* search suggestions  */
+</style>
+
+<body>
+  
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center">
+      <a href="{% url 'home' %}" class="mr-auto"><img src="{% static 'accounts/assets/img/logo.png' %}" width="150px" height="" alt="" class="img-fluid"></a>
+
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+        {#                <!--make the nav bar dynamic using {% url 'home' %}#id -->#}
+
+          <li class="active"><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'home' %}#services">Search</a></li>
+          <li><a href="{% url 'home' %}#team">About</a></li>
+          <li><a href="{% url 'home' %}#contact">Contact</a></li>
+          {% if user.is_authenticated %}
+                    <li style="color: #e43c5c;">Hi</li>
+                    <li>
+                        <button id="myBtn" type="button" class="btn btn-red" onclick="document.location='{% url 'logout' %}'">
+                            Logout
+                        </button>
+                    </li>
+                    <!-- SignUP-Login Form -->
+                {% else %}
+                    <li>
+                        <button id="myBtn" type="button" class="btn btn-red" onclick="document.location='{% url 'accounts' %}'">
+                            SignUP/Login                      
+                        </button>
+                    </li>
+                {% endif %}
+        </ul>
+      </nav><!-- .nav-menu -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div class="hero-container" data-aos="zoom-out" data-aos-duration="1500">
+      <h3>Welcome to <strong>Smart Transport System</strong></h3>
+      <h1>find buses around <i class='bx bxs-bus bx-lg' style="color: #e43c5c;"></i>-<span class="type"></span></h1> 
+      <h2>Find local bus route, search between source and destination, search by bus name and more!</h2>
+      <a href="#services" class="btn-get-started scrollto">Get Started</a>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-title">
+          <h2><i class='bx bxs-bus bx-md'></i></h2>
+          <h3>Search <span>Here</span></h3>
+          <p>Use search button below to search by Bus Name, Source and Destination, Nearby Bus Station and more!</p>
+        </div>
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Features Section ======= -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="row">
+
+          <div data-aos="fade-right" class="col-lg-3 col-md-4 col-6 col-6" onclick="findDerections()">
+            <div class="icon-box">
+              <h3><a>Find Directions</a></h3>
+              <i class="ri-search-line" style="color: #ffbb2c; margin-left: 21%;"></i>
+            </div>
+          </div>
+
+          <div data-aos="zoom-in" class="col-lg-3 col-md-4 col-6" onclick="nearbyStations()">
+            <div class="icon-box">
+              <h3><a>Nearby Stations</a></h3>
+              <i class="ri-search-line" style="color: #5578ff; margin-left: 18%;"></i>
+            </div>
+          </div>
+
+          <div data-aos="zoom-in" class="col-lg-3 col-md-4 col-6 mt-4 mt-md-0" onclick="specificBus()">
+            <div class="icon-box">
+              <h3><a>Find Specific Bus</a></h3>
+              <i class="ri-search-line" style="color: #e80368; margin-left: 14%;"></i>
+            </div>
+          </div>
+
+          <div data-aos="fade-left" class="col-lg-3 col-md-4 col-6 mt-4 mt-lg-0" onclick="window.location='{% url 'allbuses'%}';" >
+            <div class="icon-box">
+              <h3><a>All Buses</a></h3>
+              <i class="ri-search-line" style="color: #e361ff; margin-left: 42%;"></i>
+            </div>
+          </div>
+
+          <!-- SEARCH BAR - FIND_DERECTIONS  -->
+          <div class="col-md-4 offset-md-4 mt-5 border border-warning pt-3" id="findDerections">
+            <form action="{% url 'finddirection' %}" method="post">{% csrf_token %}
+              <div class="form-row" autocomplete="off">
+                <div class=" col input-group mb-3">
+                  <div class="autocomplete">
+                       <input  id="inputFrom" type="text" class="form-control" placeholder="From" required name="from" autocomplete="off">
+                  </div>
+                </div>
+                <div class=" col input-group mb-3">
+                  <div class="autocomplete">
+                    <input id="inputTo" type="text" class="form-control" placeholder="To" required name="to" autocomplete="off">
+                  </div>
+                </div>   
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>               
+              </div>
+            </form>
+          </div>
+
+          <!-- SEARCH BAR - NEARBY_STATIONS  -->
+          <div class="col-md-4 offset-md-4 mt-5 border border-warning pt-3" id="nearbyStations">
+            <form action="{% url 'searchnearby_address' %}" method="post">{% csrf_token %}
+              <div class="form-row">
+                <div class=" col input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Search ...." name="userlocationaddress" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                    <i class="ri-pin-distance-fill" onclick="getLocation()" style="color: #e80368;"data-toggle="tooltip" data-placement="bottom" title="From your location"></i>
+                   </span>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- SEARCH BAR - SPECIFIC_BUS  -->                
+          <div class="col-md-4 offset-md-4 mt-5 border border-warning pt-3" id="specificBus">
+            <form action="{% url 'findspecificbus' %}" method="post" autocomplete="off">{% csrf_token %}
+              <div class="form-row">
+                <div class=" col input-group mb-3">
+                  <div class="autocomplete">
+                    <input id="myInput" type="text" class="form-control" placeholder="Search ...." aria-label="Recipient's username" name="bus_name" required>
+                  </div>
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+        <!-- Invisible Form - GET USER LOCATION -->
+        <div class="col-md-4 offset-md-4 mt-5 pt-3 invisible">
+          <form action="{% url 'searchnearby_latlng' %}" method="post"> {% csrf_token %} <!-- Secured -->
+            <input id="userLocation" type="text" value="user location will visible here" name="userLocation">
+            <input id="passLat" type="submit">
+          </form>
+        </div>
+        <!-- Invisible Form - GET USER LOCATION -->
+
+        </div>
+      </div>
+    </section><!-- End Features Section -->
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <h2><i class='bx bx-message-alt-detail bx-md'></i></h2>
+          <h3>Contact <span>Us</span></h3>
+          <p>Feel free to get in touch with us. We are always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
+        </div>
+
+        <div>
+          <iframe style="border:0; width: 100%; height: 270px;" src="https://maps.google.com/maps?q=uap&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <div class="row mt-5">
+
+          <div class="col-lg-4">
+            <div class="info">
+              <div class="address">
+                <i class="icofont-google-map"></i>
+                <h4>Location:</h4>
+                <p>74/A, Green Road,Chennai,Tamil Naddu,India</p>
+              </div>
+
+              <div class="email">
+                <i class="icofont-envelope"></i>
+                <h4>Email:</h4>
+                <p>@example.com</p>
+              </div>
+
+              <div class="phone">
+                <i class="icofont-phone"></i>
+                <h4>Call:</h4>
+                <p>+88 01745814067</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-8 mt-5 mt-lg-0">
+
+            <form action="{% url 'feedback' %}" method="post" role="form" class="php-email-form">{% csrf_token %}
+              <div class="form-row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                  <div class="validate"></div>
+                </div>
+                <div class="col-md-6 form-group">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                  <div class="validate"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                <div class="validate"></div>
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                <div class="validate"></div>
+              </div>
+              <div class="mb-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>SmartA</h3>
+            <p>
+              74/A, Green Road <br>
+              Chennai,Tamil Nadu<br>
+             India <br><br>
+              <strong>Phone:</strong> +8802-58157091<br>
+              <strong>Email:</strong> registrar@uap-bd.edu<br>
+            </p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Site map</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Buy Bus Ticket</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Uber Service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Pathao BD</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Smart Transport</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Rail Sheba</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Join Our Newsletter</h4>
+            <p>Subscribe to our newsletter to get the latest update.</p>
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+
+      <div class="mr-md-auto text-center text-md-left">
+        <div class="copyright">
+          &copy; Copyright <strong><span>SmartA</span></strong>. All Rights Reserved
+        </div>
+      </div>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+  <a href="{% url 'finddirection'%}">hi</a>
+  <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'accounts/assets//vendor/jquery/jquery.min.js' %}"></script>  
+  <script src="{% static 'accounts/assets//vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+  <script src="{% static 'accounts/assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script> 
+  <script src="{% static 'accounts/assets/vendor/php-email-form/validate.js' %}"></script> 
+  <script src="{% static 'accounts/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script> 
+  <script src="{% static 'accounts/assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script> 
+  <script src="{% static 'accounts/assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script> 
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> <!-- New Created AOS -->
+
+  <!-- Feature Scripts -->
+  <script>
+    // AOS 
+   AOS.init(); 
+
+  //  Tooltip  
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+
+  // typed js 
+    var typed = new Typed('.type', {
+      strings: [
+          "CHENNAI",
+          "TAMBARAM",
+          "COIMBHEDU",
+          "CHENNAI CENTRAL",
+          "POONDHAMALI",
+          "T NAGAR",
+          "MARINA BEACH",
+          "SRIPERUMBHUTHUR",
+          "KUNDRATHUR",
+          "KOLATHUR",
+          "PARIS CORNER",
+          "ANNA NAGAR",
+          "MEENAMBAKKAM",
+          "CHENNAI INTERNATIONAL AIRPORT"
+      ],
+      typeSpeed: 60,
+      backSpeed: 60,
+      loop: true
+  });
+  // nav slider
+  $('#nav').onePageNav();
+  </script>
+  
+  <!-- Template Main JS File -->
+  <script src="{% static 'accounts/assets/js/main.js' %}"></script>
+  <script src="{% static 'accounts/assets/js/custom.js' %}"></script> 
+
+<!--################## Test Field #######################-->
+
+
+<!--################## Test Field #######################-->
+
+
+</body>
+
+</html>

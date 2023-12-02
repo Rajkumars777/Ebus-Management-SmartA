@@ -1,0 +1,173 @@
+<!-- Load Static  -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign-in to SmartA</title>
+<!-- Google Fonts  -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:300,600" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"> 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- bootstrap  -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Custom CSS  -->
+  <link rel="stylesheet" href="{% static 'accounts/loginform.css' %}">
+</head>
+
+<body onload="switchMe()">
+<!-- ............NAVBAR............... -->
+<nav class="navbar">
+   <div class="brand-title">
+      <a href="{% url 'home' %}" class="mr-auto">
+         <img src="{% static 'accounts/assets/img/logo.png' %}" width="150px" height="" alt="" class="img-fluid">
+      </a>
+   </div>
+   <a href="#" class="toggle-button">
+     <span class="bar"></span>
+     <span class="bar"></span>
+     <span class="bar"></span>
+   </a>
+   <div class="navbar-links">
+     <ul>
+       <li><a href="{% url 'home' %}">Home</a></li>
+       <li><a href="{% url 'home' %}#services">Search</a></li>
+       <li><a href="{% url 'home' %}#team">About</a></li>
+       <li><a href="{% url 'home' %}#contact">Contact</a></li>
+         {% if user.is_authenticated %}
+            <li>
+               <button id="myBtn" type="button" class="btn btn-red" onclick="document.location='{% url 'logout' %}'">
+                     Logout
+               </button>
+           </li>
+         {% else %}
+            <li>
+               <button id="myBtn" type="button" class="btn btn-red" onclick="document.location='{% url 'accounts' %}'">
+                     SignUP/Login
+               </button>
+            </li>
+         {% endif %}
+     </ul>
+   </div>
+ </nav>
+<!-- .............NAVBAR.............. -->
+<!-- partial:index.partial.html -->
+<div class="container">
+   <section id="formHolder">
+
+      <div class="row">
+
+         <!-- Brand Box -->
+         <div class="col-sm-6 brand">
+            <a href="#" class="logo">STS <span>.</span></a>
+
+            <div class="heading">
+               <h1><img src="{% static 'accounts/assets/img/logo.png' %}" width="250px" height="" alt="" class="img-fluid"></h1>
+               <p>Your Transportation Partner</p>
+            </div>
+
+            <div class="success-msg">
+               <p style="color:white">Great! You are one of our members now</p>
+               <a href="#" class="profile">Home</a>
+            </div>
+         </div>
+
+
+         <!-- Form Box -->
+         <div class="col-sm-6 form">
+
+            <!-- Login Form -->
+            <div class="login form-peice switched" id="log">
+               <form class="login-form" action="{% url 'login' %}" method="post">{% csrf_token %} <!-- Secured -->
+                  <!-- if Not Found  -->
+                  {% if 'login' ==  from %}
+                     <span style="color:#f95959;"> {{ error }}</span>
+                  {% endif %}
+                  <!-- if Not Found  -->
+                  <div class="form-group">
+                     <label for="loginemail">Email or user_name</label>
+                     <input type="text" name="loginemail" id="loginemail" value="{{ value.user_name }}" required>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="loginPassword">Password</label>
+                     <input type="password" name="loginPassword" id="loginPassword" required>
+                  </div>
+                  <br>
+                  <center><a href="{% url 'password_reset' %}">Forget Password</a></center>
+                  <div class="CTA">
+                     <input type="submit" value="Login">
+                     <a href="#" class="switch">I'm New</a>
+                  </div>
+               </form>
+            </div><!-- End Login Form -->
+
+
+            <!-- Signup Form -->
+            <div class="signup form-peice">
+               <form name="myForm" id="myForm" class="signup-form" action = "{% url 'register' %}" method="post">{% csrf_token %} <!-- Secured -->
+
+                  <div class="form-group">
+                     <label for="name">Full Name</label>
+                     <input type="text" name="name" id="name" class="name" value="{{ values.full_name }}" required>
+                     <span class="error"></span>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="userid">User Name</label>
+                     <input type="text" name="userid" id="userid" class="userid" value="{{ values.user_name }}" required>
+                     <span class="error"></span>
+                     <!-- Cheak username in Database -->
+                     {% if 'signup' ==  from %}
+                        {% if error == 'User name is already taken' %}
+                        <span style="color:#f95959;"> {{ error }}</span>
+                        {% endif %}
+                     {% endif %}
+                     <!-- Cheak username in Database -->
+                  </div>
+
+                  <div class="form-group">
+                     <label for="email">Email Adderss</label>
+                     <input type="email" name="emailAdress" id="email" class="email" value="{{ values.email }}" required>
+                     <span class="error"></span>
+                     <!-- Check Email in Database -->
+                     {% if 'signup' ==  from %}
+                        {% if error == 'Email is already taken' %}
+                        <span style="color:#f95959;"> {{ error }}</span>
+                        {% endif %}
+                     {% endif %}
+                     <!-- Cheak Email in Database -->
+                  </div>
+
+                  <div class="form-group">
+                     <label for="password">Password</label>
+                     <input type="password" name="password" id="password" class="pass" autocomplete="new-password" required>
+                     <span class="error"></span>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="passwordCon">Confirm Password</label>
+                     <input type="password" name="passwordCon" id="passwordCon" class="passConfirm" autocomplete="new-password" required>
+                     <span class="error"></span>
+                  </div>
+
+                  <div class="CTA">
+                     <input type="submit" value="Signup Now" id="submit" onclick="validateForm()">
+                     <a id="haveAccount" href="#" class="switch">I have an account</a>
+                  </div>
+               </form>
+            </div><!-- End Signup Form -->
+         </div>
+      </div>
+   </section>
+</div>
+<!-- partial -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<!-- Custom JS  -->
+<script src="{% static 'accounts/loginform.js' %}"></script>
+
+</body>
+</html>
